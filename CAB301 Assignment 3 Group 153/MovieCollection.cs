@@ -301,14 +301,6 @@ public class MovieCollection : IMovieCollection
 		return movieList;
 	}
 
-
-	private void AddToArray(BTreeNode r, IMovie[] movies)
-    { 
-		//Adds a movie object to an array
-		movies[arrayCounter] = r.Movie;
-		arrayCounter++;
-	}
-
 	// Clear this movie collection
 	// Pre-condotion: nil
 	// Post-condition: all the movies have been removed from this movie collection 
