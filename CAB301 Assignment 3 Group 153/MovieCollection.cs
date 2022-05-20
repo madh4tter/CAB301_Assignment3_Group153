@@ -45,7 +45,6 @@ public class MovieCollection : IMovieCollection
 {
 	private BTreeNode root; // movies are stored in a binary search tree and the root of the binary search tree is 'root' 
 	private int count; // the number of (different) movies currently stored in this movie collection 
-	private int arrayCounter; // the number of movies that are counted during the array creation
 
 
 
@@ -75,8 +74,7 @@ public class MovieCollection : IMovieCollection
 	// Post-condition: the movie has been added into this movie collection and return true, if the movie is not in this movie collection; otherwise, the movie has not been added into this movie collection and return false.
 	public bool Insert(IMovie movie)
 	{
-		//If the root is null it adds the movie as the root, if not and if it is not in the tree already it adds it alphabetically
-		if (root == null)
+		if (IsEmpty())
 		{
 			root = new BTreeNode(movie);
 			count++;
@@ -84,47 +82,42 @@ public class MovieCollection : IMovieCollection
 		}
 		else
 		{
-			bool searchResult = Search(movie);
-
-			if (searchResult != true)
+			return Insert((Movie)movie, root);
+		}
+	}
+	private bool Insert(Movie movie, BTreeNode ptr)
+	{
+		if (movie.CompareTo(ptr.Movie) == 0)
+		{
+			return false;
+		}
+		else if (movie.CompareTo(ptr.Movie) == -1)
+		{
+			if (ptr.LChild == null)
 			{
-				Insert(movie, root);
+				ptr.LChild = new BTreeNode(movie);
 				count++;
 				return true;
 			}
 			else
 			{
-				return false;
-			}
-		}
-	}
-
-	private void Insert(IMovie movie, BTreeNode ptr)
-    {
-		//Finds the correct alphabetical placement for the object then inserts it into the tree
-		if (movie.CompareTo(ptr.Movie) < 0)
-		{
-			if (ptr.LChild == null)
-            {
-				ptr.LChild = new BTreeNode(movie);
-			}
-			else
-            {
 				Insert(movie, ptr.LChild);
 			}
 		}
 		else
 		{
 			if (ptr.RChild == null)
-            {
+			{
 				ptr.RChild = new BTreeNode(movie);
+				count++;
+				return true;
 			}
 			else
-            {
+			{
 				Insert(movie, ptr.RChild);
 			}
-				
 		}
+		return false;
 	}
 
 
@@ -133,31 +126,30 @@ public class MovieCollection : IMovieCollection
 	// Post-condition: the movie is removed out of this movie collection and return true, if it is in this movie collection; return false, if it is not in this movie collection
 	public bool Delete(IMovie movie)
 	{
-		//Searches through the tree until it finds the movie object.
-		BTreeNode ptr = root;
-		BTreeNode parent = null; 
+		if (Delete((Movie)movie, root))
+		{
+			count--;
+			return true;
+		}
+		else return false;
+	}
 
+	public bool Delete(Movie movie, BTreeNode ptr)
+	{
+		BTreeNode parent = null;
 		while ((ptr != null) && (movie.CompareTo(ptr.Movie) != 0))
 		{
 			parent = ptr;
 			if (movie.CompareTo(ptr.Movie) < 0)
-            {
 				ptr = ptr.LChild;
-			}
 			else
-            {
 				ptr = ptr.RChild;
-
-			}
 		}
-
-		// if the search was successful it deletes the node and moves all the other lower nodes accordingly
-		if (ptr != null) 
+		if (ptr != null)
 		{
-			count--;
 			if ((ptr.LChild != null) && (ptr.RChild != null))
 			{
-				if (ptr.LChild.RChild == null) 
+				if (ptr.LChild.RChild == null)
 				{
 					ptr.Movie = ptr.LChild.Movie;
 					ptr.LChild = ptr.LChild.LChild;
@@ -171,7 +163,6 @@ public class MovieCollection : IMovieCollection
 						pp = p;
 						p = p.RChild;
 					}
-
 					ptr.Movie = p.Movie;
 					pp.RChild = p.LChild;
 				}
@@ -180,31 +171,32 @@ public class MovieCollection : IMovieCollection
 			{
 				BTreeNode c;
 				if (ptr.LChild != null)
-                {
+				{
 					c = ptr.LChild;
 				}
 				else
-                {
+				{
 					c = ptr.RChild;
 				}
-
 				if (ptr == root)
-                {
+				{
 					root = c;
+					return true;
 				}
 				else
 				{
 					if (ptr == parent.LChild)
-                    {
+					{
 						parent.LChild = c;
+						return true;
 					}
 					else
-                    {
+					{
 						parent.RChild = c;
+						return true;
 					}
 				}
 			}
-			return true;
 		}
 		return false;
 	}
@@ -299,14 +291,6 @@ public class MovieCollection : IMovieCollection
 			InOrderTraverse(root.RChild, movieList);
 		}
 		return movieList;
-	}
-
-
-	private void AddToArray(BTreeNode r, IMovie[] movies)
-    { 
-		//Adds a movie object to an array
-		movies[arrayCounter] = r.Movie;
-		arrayCounter++;
 	}
 
 	// Clear this movie collection
