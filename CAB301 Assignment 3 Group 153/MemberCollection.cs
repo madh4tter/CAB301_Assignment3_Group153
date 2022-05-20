@@ -158,7 +158,6 @@ class MemberCollection : IMemberCollection
 
                 if (member.CompareTo(members[mid]) == 0)
                 {
-                    Console.WriteLine("Is Found");
                     return true;
                 }
                 else if (member.CompareTo(members[mid]) == 1)
@@ -182,6 +181,46 @@ class MemberCollection : IMemberCollection
         
     }
 
+    // Find a given member in this member collection
+    // Pre-condition: nil
+    // Post-condition: return the reference of the member object in the member collection, if this member is in the member collection; return null otherwise; member collection remains unchanged
+    public IMember Find(IMember member)
+    {
+        // To be implemented by students in Phase 1
+        if (count > 0)
+        {
+            int low = 0;
+            int high = count;
+            int mid = (low + high) / 2;
+
+            while (low < high)
+            {
+                mid = (low + high) / 2;
+
+                if (member.CompareTo(members[mid]) == 0)
+                {
+                    return members[mid];
+                }
+                else if (member.CompareTo(members[mid]) == 1)
+                {
+                    low = mid + 1;
+                }
+                else
+                {
+                    high = mid - 1;
+                }
+            }
+
+            if (member.CompareTo(members[low]) == 0)
+            {
+                return members[low];
+            }
+            return null;
+        }
+        else
+            return null;
+    }
+
     // Remove all the members in this member collection
     // Pre-condition: nil
     // Post-condition: no member in this member collection 
@@ -193,6 +232,7 @@ class MemberCollection : IMemberCollection
         }
         count = 0;
     }
+
 
     // Return a string containing the information about all the members in this member collection.
     // The information includes last name, first name and contact number in this order

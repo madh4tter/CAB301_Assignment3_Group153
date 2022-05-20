@@ -117,7 +117,7 @@ public class MovieCollection : IMovieCollection
 				Insert(movie, ptr.RChild);
 			}
 		}
-		return false;
+		return true;
 	}
 
 

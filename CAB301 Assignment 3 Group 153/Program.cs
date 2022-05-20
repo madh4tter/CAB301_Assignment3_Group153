@@ -35,11 +35,14 @@ namespace CAB301_Assignment_3_Group_153
                     StaffMenu(movieList, members);
                     break;
                 case 2:
-                    memberLogin(movieList, members);
+                    //MemberLogin(movieList, members); Uncomment before submitting
+                    Member remove = new Member("test", "temp", "0444444444", "2378");
+                    MemberMenu(movieList, members, remove);
                     break;
             }
         }
 
+        //Staff Login
         private static void StaffLogin(MovieCollection movieList, MemberCollection members)
         {
             Console.Write("Username: ");
@@ -69,6 +72,34 @@ namespace CAB301_Assignment_3_Group_153
                         MainMenu(movieList, members);
                         break;
                 }
+            }
+        }
+        
+        //Member login
+        private static void MemberLogin(MovieCollection movieList, MemberCollection members)
+        {
+            Console.Write("First name: ");
+            string FirstName = Console.ReadLine();
+            Console.Write("Last name: ");
+            string LastName = Console.ReadLine();
+            Console.Write("Pin: ");
+            string Pin = Console.ReadLine();
+            Member temp = new Member(FirstName, LastName);
+            //string pin2 = ;
+
+            if (members.IsEmpty())
+            {
+                Console.WriteLine("No members");
+                MainMenu(movieList, members);
+            }
+            else if (members.Search(temp) && members.Find(temp).Pin == Pin)
+            {
+                MemberMenu(movieList, members, (Member)members.Find(temp));
+            }
+            else
+            {
+                Console.WriteLine("First name, Last name, or Pin incorrect");
+                MemberLogin(movieList, members);
             }
         }
 
@@ -120,7 +151,7 @@ namespace CAB301_Assignment_3_Group_153
         }
 
         //Member Menu
-        private static void memberLogin(MovieCollection movieList, MemberCollection members)
+        private static void MemberMenu(MovieCollection movieList, MemberCollection members, Member currentMember)
         {
             Console.WriteLine("======================Member Menu=======================");
             Console.WriteLine();
@@ -142,25 +173,25 @@ namespace CAB301_Assignment_3_Group_153
                     MainMenu(movieList, members);
                     break;
                 case "1":
-                    //ListAllMovies();
+                    ListAllMovies(movieList, members, currentMember);
                     break;
                 case "2":
-                    //MovieInformation();
+                    MovieInformation(movieList, members, currentMember);
                     break;
                 case "3":
-                    //BorrowMovie();
+                    BorrowMovie(movieList, members, currentMember);
                     break;
                 case "4":
-                    //ReturnMovie();
+                    //ReturnMovie(movieList, members);
                     break;
                 case "5":
-                    //CurrentBorrowing();
+                    //CurrentBorrowing(movieList, members);
                     break;
                 case "6":
                     //TopThree();
                     break;
                 default:
-                    memberLogin(movieList, members);
+                    MemberMenu(movieList, members, currentMember);
                     break;
             }
         }
@@ -196,6 +227,7 @@ namespace CAB301_Assignment_3_Group_153
                 else
                 {
                     Console.WriteLine("Error");
+                    StaffMenu(movieList, members);
                 }
             }
             
@@ -272,12 +304,8 @@ namespace CAB301_Assignment_3_Group_153
                 StaffMenu(movieList, members);
             }
         }
-        /* m. When a member is being
-        registered via a staff member, the member’s fist name, last name, contact
-        phone number are recorded in the system, a password is set by the member
-        via the staff. The system must check and make sure the phone number and
-        the password are valid. A contact phone number is valid if it has 10 digits,
-        and the first digit is a ‘0’. A password is valid if it has 4-6 digits. */
+
+
         private static void RegisterMember(MovieCollection movieList, MemberCollection members)
         {
             Console.Write("First name:");
@@ -352,6 +380,62 @@ namespace CAB301_Assignment_3_Group_153
         }
 
         //Methods for Member menu
+        private static void ListAllMovies(MovieCollection movieList, MemberCollection members, Member currentMember)
+        {
+            Movie[] array = (Movie[])movieList.ToArray();
+            int i = 0;
+            foreach (var item in array)
+            {
+                Console.WriteLine($"{i++ + 1}. {item.ToString()}");
+            }
+            MemberMenu(movieList, members, currentMember);
+        }
 
+        private static void MovieInformation(MovieCollection movieList, MemberCollection members, Member currentMember)
+        {
+            Console.Write("Movie: ");
+            string search = Console.ReadLine();
+            Movie temp = (Movie)movieList.Search(search);
+
+            if (temp != null)
+            {
+                Console.WriteLine(temp.ToString());
+                Console.WriteLine("Press enter to continue...");
+                Console.ReadLine();
+                MemberMenu(movieList, members, currentMember);
+            }
+            else
+            {
+                Console.WriteLine($"{search} not found");
+                Console.WriteLine();
+                Console.WriteLine("Press enter to continue...");
+                Console.ReadLine();
+                MemberMenu(movieList, members, currentMember);
+            }
+        }
+
+        private static void BorrowMovie(MovieCollection movieList, MemberCollection members, Member currentMember)
+        {
+            Console.WriteLine("======================Movie Borrow=======================");
+            Console.Write("Search: ");
+            string search = Console.ReadLine();
+            Movie temp = (Movie)movieList.Search(search);
+            if (temp != null && temp.AddBorrower(currentMember))
+            {
+                Console.WriteLine("Movie Successfully borrowed");
+                Console.WriteLine();
+                Console.WriteLine("Press enter to continue");
+                Console.ReadLine();
+                MemberMenu(movieList, members, currentMember);
+            }
+            else
+            {
+                Console.WriteLine("No movie found");
+                Console.WriteLine();
+                Console.WriteLine("Press enter to continue");
+                Console.ReadLine();
+                MemberMenu(movieList, members, currentMember);
+            }
+        }
     }
 }

@@ -68,29 +68,34 @@ public class Movie : IMovie
     //                  if the member is in the borrowers list, do not add the member to the borrowers list and return false.  
     public bool AddBorrower(IMember member)
     {
-        //If there is an available copy of the movie and the member isnt already borrowing it, it adds the member to the borrowers list and takes an available copy and adds amount of borrowers
-        if(AvailableCopies >= 1)
+        Member instance = new Member(member.FirstName, member.LastName, member.ContactNumber, member.Pin);
+        if (NoBorrowings >= 10)
         {
-            bool searchResult = false;
-            searchResult = Borrowers.Search(member);
-            if (searchResult == false)
+            Console.WriteLine("Maximum number of borrows hit");
+            return false;
+        }
+        else if (AvailableCopies >= 1)
+        {
+            if (!Borrowers.Search(instance))
             {
-                Borrowers.Add(member);
+                Borrowers.Add(instance);
                 AvailableCopies--;
                 NoBorrowings++;
                 return true;
             }
             else
             {
+                Console.WriteLine("Member already in list");
                 return false;
             }
         }
         else
         {
+            Console.WriteLine("No copies available");
             return false;
         }
-        
-        
+
+
     }
 
     //Remove a member from the borrower list of this movie
