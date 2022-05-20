@@ -347,7 +347,45 @@ namespace CAB301_Assignment_3_Group_153
 
         private static void RemoveMember(MovieCollection movieList, MemberCollection members)
         {
-            Console.WriteLine();
+            Console.WriteLine("Enter a User to Remove:");
+
+            Console.Write("First name: ");
+            string FirstName = Console.ReadLine();
+            Console.Write("Last name: ");
+            string LastName = Console.ReadLine();
+
+            Member deletingMember = new Member(FirstName, LastName);
+
+            if(members.Search(deletingMember))
+            {
+                Movie[] array = (Movie[])movieList.ToArray();
+                int foundCount = 0;
+
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (array[i] != null && array[i].TotalCopies > array[i].AvailableCopies)
+                    {
+                        if (array[i].Borrowers.Search(deletingMember))
+                        {
+                            Console.WriteLine($"User has an existing loan on {array[i].Title}");
+                            foundCount++;
+                            //break;
+                        }
+                    }
+                }
+                if (foundCount == 0)
+                {
+                    members.Delete(deletingMember);
+                    Console.WriteLine($"User {deletingMember.FirstName} {deletingMember.LastName} has been deleted");
+                }
+            }
+            else
+            {
+                Console.WriteLine("User Does Not Exist");
+            }
+            
+
+            StaffMenu(movieList, members);
         }
 
         private static void DisplayInformation(MovieCollection movielist, MemberCollection members)
@@ -360,7 +398,7 @@ namespace CAB301_Assignment_3_Group_153
             Member search = new Member(FirstName, LastName);
             if (members.Search(search))
             {
-                Console.WriteLine($"Member Last and First name (Last, First): {members.ToString()}");
+                Console.WriteLine($"{search.LastName} and {search.FirstName} (Last, First): {search.ContactNumber}");
             }
             StaffMenu(movielist, members);
             
