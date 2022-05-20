@@ -67,14 +67,7 @@ public class MovieCollection : IMovieCollection
 	public bool IsEmpty()
 	{
 		//Finds if the root is null and if so the BTree is empty
-		if (root == null)
-        {
-			return true;
-        }
-        else
-        {
-			return false;
-        }
+		return root == null;
 	}
 
 	// Insert a movie into this movie collection
