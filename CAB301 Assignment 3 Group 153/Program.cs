@@ -7,15 +7,16 @@ namespace CAB301_Assignment_3_Group_153
         static void Main(string[] args)
         {
             MovieCollection aCollection = new MovieCollection();
+            MemberCollection members = new MemberCollection(10);
             //Main Menu
-            mainMenu(aCollection);
+            MainMenu(aCollection, members);
         }
         //Main menu
-        private static void mainMenu(MovieCollection movieList)
+        private static void MainMenu(MovieCollection movieList, MemberCollection members)
         {
-            Console.WriteLine("=======================================================");
-            Console.WriteLine("Welcome to Community Libart Movie DVD Management System");
-            Console.WriteLine("=======================================================");
+            Console.WriteLine("========================================================");
+            Console.WriteLine("Welcome to Community Librart Movie DVD Management System");
+            Console.WriteLine("========================================================");
             Console.WriteLine();
             Console.WriteLine("1. Staff Login");
             Console.WriteLine("2. Member Login");
@@ -30,16 +31,49 @@ namespace CAB301_Assignment_3_Group_153
                     Console.WriteLine("Exiting");
                     break;
                 case 1:
-                    staffLogin(movieList);
+                    //StaffLogin(movieList, members); Uncomment brefore submitting
+                    StaffMenu(movieList, members);
                     break;
                 case 2:
-                    memberLogin(movieList);
+                    memberLogin(movieList, members);
                     break;
             }
         }
 
+        private static void StaffLogin(MovieCollection movieList, MemberCollection members)
+        {
+            Console.Write("Username: ");
+            string Username = Console.ReadLine();
+            Console.Write("Password: ");
+            string Password = Console.ReadLine();
+            if (Username == "staff" && Password == "today123")
+            {
+                StaffMenu(movieList, members);
+            }
+            else
+            {
+                Console.WriteLine("Incorrect Username or Password");
+                Console.WriteLine("1. Try again");
+                Console.WriteLine("2. Main menu");
+                string input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1":
+                        StaffLogin(movieList, members);
+                        break;
+                    case "2":
+                        MainMenu(movieList, members);
+                        break;
+                    default:
+                        Console.WriteLine("Invalid");
+                        MainMenu(movieList, members);
+                        break;
+                }
+            }
+        }
+
         //Staff menu
-        private static void staffLogin(MovieCollection movieList)
+        private static void StaffMenu(MovieCollection movieList, MemberCollection members)
         {
             Console.WriteLine("======================Staff Menu=======================");
             Console.WriteLine();
@@ -58,35 +92,35 @@ namespace CAB301_Assignment_3_Group_153
             {
                 case "0":
                     Console.WriteLine("Returning to main menu");
-                    mainMenu(movieList);
+                    MainMenu(movieList, members);
                     break;
                 case "1":
-                    addDVD(movieList);
+                    AddDVD(movieList, members);
                     break;
                 case "2":
-                    //removeDVD();
+                    RemoveDVD(movieList, members);
                     break;
                 case "3":
-                    //registerMember();
+                    RegisterMember(movieList, members);
                     break;
                 case "4":
-                    //removeMember();
+                    RemoveMember(movieList, members);
                     break;
                 case "5":
-                    //displayInformation();
+                    DisplayInformation(movieList, members);
                     break;
                 case "6":
-                    //currentBorrowers();
+                    CurrentBorrowers(movieList, members);
                     break;
                 default:
                     Console.WriteLine("Invalid");
-                    staffLogin(movieList);
+                    StaffMenu(movieList, members);
                     break;
             }
         }
 
         //Member Menu
-        private static void memberLogin(MovieCollection movieList)
+        private static void memberLogin(MovieCollection movieList, MemberCollection members)
         {
             Console.WriteLine("======================Member Menu=======================");
             Console.WriteLine();
@@ -105,34 +139,34 @@ namespace CAB301_Assignment_3_Group_153
             {
                 case "0":
                     Console.WriteLine("Returning to main menu");
-                    mainMenu(movieList);
+                    MainMenu(movieList, members);
                     break;
                 case "1":
-                    //listAllMovies();
+                    //ListAllMovies();
                     break;
                 case "2":
-                    //movieInformation();
+                    //MovieInformation();
                     break;
                 case "3":
-                    //borrowMovie();
+                    //BorrowMovie();
                     break;
                 case "4":
-                    //returnMovie();
+                    //ReturnMovie();
                     break;
                 case "5":
-                    //currentBorrowing();
+                    //CurrentBorrowing();
                     break;
                 case "6":
-                    //topThree();
+                    //TopThree();
                     break;
                 default:
-                    memberLogin(movieList);
+                    memberLogin(movieList, members);
                     break;
             }
         }
 
         //Methods for staff menu
-        private static void addDVD(MovieCollection movieList)
+        private static void AddDVD(MovieCollection movieList, MemberCollection members)
         {
             Console.Write("Title: ");
             string title = Console.ReadLine();
@@ -142,7 +176,7 @@ namespace CAB301_Assignment_3_Group_153
                 Console.WriteLine("Movie found How many DVDs would you like to add:");
                 int input = Convert.ToInt32(Console.ReadLine());
                 title1.AvailableCopies += input;
-                staffLogin(movieList);
+                StaffMenu(movieList, members);
 
             }
             else
@@ -157,7 +191,7 @@ namespace CAB301_Assignment_3_Group_153
                 if (movieList.Insert(add))
                 {
                     Console.WriteLine("Movie successfully added to collection");
-                    staffLogin(movieList);
+                    StaffMenu(movieList, members);
                 }
                 else
                 {
@@ -221,6 +255,100 @@ namespace CAB301_Assignment_3_Group_153
                     break;
             }
             return MovieClassification.G;
+        }
+
+        private static void RemoveDVD(MovieCollection movieList, MemberCollection members)
+        {
+            Console.WriteLine("What movie would you like to remove:");
+            string remove = Console.ReadLine();
+            if (movieList.Delete(movieList.Search(remove)))
+            {
+                Console.WriteLine($"Movie: {remove} has been removed successfully");
+                StaffMenu(movieList, members);
+            }
+            else
+            {
+                Console.WriteLine($"Movie: {remove} not found");
+                StaffMenu(movieList, members);
+            }
+        }
+        /* m. When a member is being
+        registered via a staff member, the member’s fist name, last name, contact
+        phone number are recorded in the system, a password is set by the member
+        via the staff. The system must check and make sure the phone number and
+        the password are valid. A contact phone number is valid if it has 10 digits,
+        and the first digit is a ‘0’. A password is valid if it has 4-6 digits. */
+        private static void RegisterMember(MovieCollection movieList, MemberCollection members)
+        {
+            Console.Write("First name:");
+            string Firstname = Console.ReadLine();
+            Console.Write("Last name:");
+            string Lastname = Console.ReadLine();
+            string ContactNumber = "1";
+            while (true)
+            {
+                Console.WriteLine("0 - to return to main menu");
+                Console.Write("Contact number:");
+                ContactNumber = Console.ReadLine();
+                if (ContactNumber == "0")
+                {
+                    StaffMenu(movieList, members);
+                    break;
+                }
+                if (IMember.IsValidContactNumber(ContactNumber))
+                {
+                    break;
+                }
+            }
+            string Pin = "1";
+            while (!IMember.IsValidPin(Pin))
+            {
+                Console.WriteLine("0 - to return to main menu");
+                Console.Write("Password:");
+                Pin = Console.ReadLine();
+                if (Pin == "0")
+                {
+                    StaffMenu(movieList, members);
+                    break;
+                }
+            }
+            Member newMember = new Member(Firstname, Lastname, ContactNumber, Pin);
+            members.Add(newMember);
+            StaffMenu(movieList, members);
+        }
+
+        private static void RemoveMember(MovieCollection movieList, MemberCollection members)
+        {
+            Console.WriteLine();
+        }
+
+        private static void DisplayInformation(MovieCollection movielist, MemberCollection members)
+        {
+            Console.Write("First name: ");
+            string FirstName = Console.ReadLine();
+            Console.Write("Last name: ");
+            string LastName = Console.ReadLine();
+
+            Member search = new Member(FirstName, LastName);
+            if (members.Search(search))
+            {
+                Console.WriteLine($"Member Last and First name (Last, First): {members.ToString()}");
+            }
+            StaffMenu(movielist, members);
+            
+        }
+
+        private static void CurrentBorrowers(MovieCollection movielist, MemberCollection members)
+        {
+            Console.Write("Movie: ");
+            string movieTitle = Console.ReadLine();
+            Movie result = (Movie)movielist.Search(movieTitle);
+            Console.WriteLine($"Users currently borrowing {movieTitle}:");
+            for (int i = 0; i < result.Borrowers.ToString().Length; i++)
+            {
+                Console.WriteLine($"{i + 1}. {result.Borrowers.ToString()}");
+            }
+            StaffMenu(movielist, members);
         }
 
         //Methods for Member menu

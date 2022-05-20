@@ -173,10 +173,8 @@ class MemberCollection : IMemberCollection
 
             if (member.CompareTo(members[low]) == 0)
             {
-                Console.WriteLine("Is Found");
                 return true;
             }
-            Console.WriteLine("Is Not Found");
             return false;
         }
         else
