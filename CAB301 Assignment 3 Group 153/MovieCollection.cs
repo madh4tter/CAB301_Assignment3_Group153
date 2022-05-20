@@ -230,7 +230,6 @@ public class MovieCollection : IMovieCollection
 		}
 		else
 		{
-            Console.WriteLine($"{movie.Title} not found");
 			return false;
 		}
 	}
@@ -264,7 +263,6 @@ public class MovieCollection : IMovieCollection
 		}
 		else
 		{
-            Console.WriteLine($"{movieTitle} not found");
 			return null;
 		}
 	}
