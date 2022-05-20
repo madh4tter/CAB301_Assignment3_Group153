@@ -44,7 +44,9 @@ public class BTreeNode
 public class MovieCollection : IMovieCollection
 {
 	private BTreeNode root; // movies are stored in a binary search tree and the root of the binary search tree is 'root' 
-	private int count; // the number of (different) movies currently stored in this movie collection 
+	private int count; // the number of (different) movies currently stored in this movie collection
+	private int arrayCounter; // the number of movies that are counted during the array creation
+
 
 
 
@@ -271,13 +273,14 @@ public class MovieCollection : IMovieCollection
 	// Store all the movies in this movie collection in an array in the dictionary order by their titles
 	// Pre-condition: nil
 	// Post-condition: return an array of movies that are stored in dictionary order by their titles
+	/*
 	public IMovie[] ToArray()
 	{
 		Movie[] movieList = new Movie[count];
 		IMovie[] result = InOrderTraverse(root, movieList);
 		return result;
 	}
-
+	*/
 	int i = 0;
 	private IMovie[] InOrderTraverse(BTreeNode root, Movie[] movieList)
 	{
@@ -309,6 +312,56 @@ public class MovieCollection : IMovieCollection
 			Delete(root.Movie);
 			count = 0;
 		}
+	}
+
+	//EVERYTHING UNDER THIS IS WHAT I ADDED BACK PLUS THE ARRAY COUNTER AT THE TOP
+	// Store all the movies in this movie collection in an array in the dictionary order by their titles
+	// Pre-condition: nil
+	// Post-condition: return an array of movies that are stored in dictionary order by their titles
+	public IMovie[] ToArray()
+	{
+		//Creates an Array with the size of how many movies there are then adds them to an array through PreOrderTravarse then sorts the array
+		Movie[] movies = new Movie[count];
+		arrayCounter = 0;
+		PreOrderTravarseAdd(root, movies);
+
+		// Sort Array
+		int min;
+		Movie temp;
+		for (int i = 0; i <= (count - 2); i++)
+		{
+			min = i;
+			for (int j = (i + 1); j <= (count - 1); j++)
+			{
+				if (movies[j].CompareTo(movies[min]) == -1)
+				{
+					min = j;
+				}
+			}
+			temp = movies[i];
+			movies[i] = movies[min];
+			movies[min] = temp;
+		}
+
+		return movies;
+	}
+
+	private void PreOrderTravarseAdd(BTreeNode r, IMovie[] movies)
+	{
+		//PreOrderTravarse through the BTree and add it to the array
+		if (r != null)
+		{
+			AddToArray(r, movies);
+			PreOrderTravarseAdd(r.LChild, movies);
+			PreOrderTravarseAdd(r.RChild, movies);
+		}
+	}
+
+	private void AddToArray(BTreeNode r, IMovie[] movies)
+	{
+		//Adds a movie object to an array
+		movies[arrayCounter] = r.Movie;
+		arrayCounter++;
 	}
 }
 

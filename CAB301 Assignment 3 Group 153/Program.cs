@@ -182,13 +182,13 @@ namespace CAB301_Assignment_3_Group_153
                     BorrowMovie(movieList, members, currentMember);
                     break;
                 case "4":
-                    //ReturnMovie(movieList, members);
+                    ReturnMovie(movieList, members, currentMember);
                     break;
                 case "5":
-                    //CurrentBorrowing(movieList, members);
+                    CurrentBorrowing(movieList, members, currentMember);
                     break;
                 case "6":
-                    //TopThree();
+                    TopThree(movieList, members, currentMember);
                     break;
                 default:
                     MemberMenu(movieList, members, currentMember);
@@ -372,10 +372,18 @@ namespace CAB301_Assignment_3_Group_153
             string movieTitle = Console.ReadLine();
             Movie result = (Movie)movielist.Search(movieTitle);
             Console.WriteLine($"Users currently borrowing {movieTitle}:");
-            for (int i = 0; i < result.Borrowers.ToString().Length; i++)
+            if(result != null)
             {
-                Console.WriteLine($"{i + 1}. {result.Borrowers.ToString()}");
+                for (int i = 0; i < result.Borrowers.ToString().Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {result.Borrowers.ToString()}");
+                }
             }
+            else
+            {
+                Console.WriteLine($"No One is Renting That Movie");
+            }
+            
             StaffMenu(movielist, members);
         }
 
@@ -386,7 +394,14 @@ namespace CAB301_Assignment_3_Group_153
             int i = 0;
             foreach (var item in array)
             {
-                Console.WriteLine($"{i++ + 1}. {item.ToString()}");
+                if (item != null)
+                {
+                    Console.WriteLine($"{i++ + 1}. {item.ToString()}");
+                }
+                else
+                {
+                    Console.WriteLine("No Available Movies");
+                }
             }
             MemberMenu(movieList, members, currentMember);
         }
@@ -436,6 +451,92 @@ namespace CAB301_Assignment_3_Group_153
                 Console.ReadLine();
                 MemberMenu(movieList, members, currentMember);
             }
+        }
+
+        private static void ReturnMovie(MovieCollection movieList, MemberCollection members, Member currentMember)
+        {
+            Console.WriteLine("======================Movie Return=======================");
+            Console.Write("DVD Name: ");
+            string search = Console.ReadLine();
+            Movie temp = (Movie)movieList.Search(search);
+            if(temp != null && temp.RemoveBorrower(currentMember))
+            {
+                Console.WriteLine("Movie Successfully Returned");
+                Console.WriteLine();
+                Console.WriteLine("Press enter to continue");
+                Console.ReadLine();
+                MemberMenu(movieList, members, currentMember);
+            }
+            else
+            {
+                Console.WriteLine("No movie found");
+                Console.WriteLine();
+                Console.WriteLine("Press enter to continue");
+                Console.ReadLine();
+                MemberMenu(movieList, members, currentMember);
+            }
+        }
+
+        private static void CurrentBorrowing(MovieCollection movieList, MemberCollection members, Member currentMember)
+        {
+            Console.WriteLine("======================Current Borrowing=======================");
+            Console.Write("You are currently borrowing: ");
+            Console.WriteLine();
+
+            Movie[] array = (Movie[])movieList.ToArray();
+            int foundCount = 0;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] != null && array[i].TotalCopies > array[i].AvailableCopies)
+                {
+                    if (array[i].Borrowers.Search(currentMember))
+                    {
+                        Console.WriteLine($"{foundCount++ + 1}. {array[i].ToString()}");
+                    }
+                }
+            }
+            if (foundCount == 0)
+            {
+                Console.WriteLine("No Available Movies");
+            }
+            Console.WriteLine();
+            MemberMenu(movieList, members, currentMember);
+        }
+
+        private static void TopThree(MovieCollection movieList, MemberCollection members, Member currentMember)
+        {
+            Console.WriteLine("======================Top Three DVDS=======================");
+            Console.Write("The Current Top Three DVDS are: ");
+            Console.WriteLine();
+
+            Movie[] array = (Movie[])movieList.ToArray();
+
+            // Sort Array
+            int max;
+            Movie temp;
+            for (int i = 0; i <= (array.Length - 2); i++)
+            {
+                max = i;
+                for (int j = (i + 1); j <= (array.Length - 1); j++)
+                {
+                    if (array[j].NoBorrowings.CompareTo(array[max].NoBorrowings) == 1)
+                    {
+                        max = j;
+                    }
+                }
+                temp = array[i];
+                array[i] = array[max];
+                array[max] = temp;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"{i+1}: {array[i].Title}");
+            }
+
+            Console.WriteLine();
+            MemberMenu(movieList, members, currentMember);
         }
     }
 }

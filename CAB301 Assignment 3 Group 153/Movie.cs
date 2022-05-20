@@ -110,11 +110,10 @@ public class Movie : IMovie
         if(searchResult == true)
         {
             Borrowers.Delete(member);
-            NoBorrowings--;
             AvailableCopies++;
             return true;
         }
-        return true;
+        return false;
     }
 
     //Define how to comapre two Movie objects
