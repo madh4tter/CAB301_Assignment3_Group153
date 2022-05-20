@@ -238,6 +238,7 @@ public class MovieCollection : IMovieCollection
 		}
 		else
 		{
+            Console.WriteLine($"{movie.Title} not found");
 			return false;
 		}
 	}
@@ -271,52 +272,35 @@ public class MovieCollection : IMovieCollection
 		}
 		else
 		{
+            Console.WriteLine($"{movieTitle} not found");
 			return null;
 		}
 	}
 
-	
+
 	// Store all the movies in this movie collection in an array in the dictionary order by their titles
 	// Pre-condition: nil
 	// Post-condition: return an array of movies that are stored in dictionary order by their titles
 	public IMovie[] ToArray()
 	{
-		//Creates an Array with the size of how many movies there are then adds them to an array through PreOrderTravarse then sorts the array
-		IMovie[] movies = new IMovie[count];
-		arrayCounter = 0;
-		PreOrderTravarseAdd(root, movies);
-		
-		// Sort Array
-		int min;
-		IMovie temp;
-		for (int i = 0; i <= (count - 2); i++)
-		{
-			min = i;
-			for (int j = (i + 1); j <= (count - 1); j++)
-			{
-				if (movies[j].CompareTo(movies[min]) == -1)
-				{
-					min = j;
-				}
-			}
-			temp = movies[i];
-			movies[i] = movies[min];
-			movies[min] = temp;
-		}
-		
-		return movies;
+		Movie[] movieList = new Movie[count];
+		IMovie[] result = InOrderTraverse(root, movieList);
+		return result;
 	}
 
-	private void PreOrderTravarseAdd(BTreeNode r, IMovie[] movies)
-    {
-		//PreOrderTravarse through the BTree and add it to the array
-		if(r != null)
-        {
-			AddToArray(r, movies);
-			PreOrderTravarseAdd(r.LChild, movies);
-			PreOrderTravarseAdd(r.RChild, movies);
-        }
-    }
+	int i = 0;
+	private IMovie[] InOrderTraverse(BTreeNode root, Movie[] movieList)
+	{
+
+		if (root != null && count > 0 && i < count)
+		{
+			InOrderTraverse(root.LChild, movieList);
+			movieList[i++] = (Movie)root.Movie;
+			InOrderTraverse(root.RChild, movieList);
+		}
+		return movieList;
+	}
+
 
 	private void AddToArray(BTreeNode r, IMovie[] movies)
     { 
@@ -330,9 +314,19 @@ public class MovieCollection : IMovieCollection
 	// Post-condition: all the movies have been removed from this movie collection 
 	public void Clear()
 	{
-		//Clears the root and clears the count
-		root = null;
-		count = 0;
+		Traverse(root);
+	}
+
+	//In order traversal using delete method to delete each node one by one
+	private void Traverse(BTreeNode root)
+	{
+		if (root != null)
+		{
+			Traverse(root.LChild);
+			Traverse(root.RChild);
+			Delete(root.Movie);
+			count = 0;
+		}
 	}
 }
 
