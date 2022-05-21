@@ -8,6 +8,22 @@ namespace CAB301_Assignment_3_Group_153
         {
             MovieCollection aCollection = new MovieCollection();
             MemberCollection members = new MemberCollection(10);
+            Member test = new Member("test", "temp", "0333333333", "1234");
+            Member temp = new Member("temp", "test", "0333333333", "1234");
+            Member wert = new Member("wert", "fee", "0333333333", "1234");
+            members.Add(test);
+            members.Add(temp);
+            members.Add(wert);
+
+            Movie Titanic = new Movie("Titanic", MovieGenre.Drama, MovieClassification.M, 120, 10);
+            Movie wer = new Movie("wer", MovieGenre.Drama, MovieClassification.M, 120, 10);
+            Movie dessa = new Movie("dessa", MovieGenre.Drama, MovieClassification.M, 120, 10);
+            Movie dgfh = new Movie("dgfh", MovieGenre.Drama, MovieClassification.M, 120, 10);
+            aCollection.Insert(Titanic);
+            aCollection.Insert(wer);
+            aCollection.Insert(dessa);
+            aCollection.Insert(dgfh);
+
             //Main Menu
             MainMenu(aCollection, members);
         }
@@ -23,21 +39,22 @@ namespace CAB301_Assignment_3_Group_153
             Console.WriteLine("0. Exit");
             Console.WriteLine();
             Console.WriteLine("Enter your choice ==> (1/2/0)");
-            int input = Convert.ToInt32(Console.ReadLine());
+            string input = Console.ReadLine();
 
             switch (input)
             {
-                case 0:
+                case "0":
                     Console.WriteLine("Exiting");
                     break;
-                case 1:
-                    //StaffLogin(movieList, members); Uncomment brefore submitting
-                    StaffMenu(movieList, members);
+                case "1":
+                    StaffLogin(movieList, members);
                     break;
-                case 2:
-                    //MemberLogin(movieList, members); Uncomment before submitting
-                    Member remove = new Member("test", "temp", "0444444444", "2378");
-                    MemberMenu(movieList, members, remove);
+                case "2":
+                    MemberLogin(movieList, members);
+                    break;
+                default:
+                    Console.WriteLine("Invalid");
+                    MainMenu(movieList, members);
                     break;
             }
         }
@@ -85,7 +102,6 @@ namespace CAB301_Assignment_3_Group_153
             Console.Write("Pin: ");
             string Pin = Console.ReadLine();
             Member temp = new Member(FirstName, LastName);
-            //string pin2 = ;
 
             if (members.IsEmpty())
             {
@@ -199,6 +215,7 @@ namespace CAB301_Assignment_3_Group_153
         //Methods for staff menu
         private static void AddDVD(MovieCollection movieList, MemberCollection members)
         {
+            Console.WriteLine("======================Add DVD=======================");
             Console.Write("Title: ");
             string title = Console.ReadLine();
             Movie title1 = (Movie)movieList.Search(title);
@@ -222,6 +239,9 @@ namespace CAB301_Assignment_3_Group_153
                 if (movieList.Insert(add))
                 {
                     Console.WriteLine("Movie successfully added to collection");
+                    Console.WriteLine();
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
                     StaffMenu(movieList, members);
                 }
                 else
@@ -291,11 +311,34 @@ namespace CAB301_Assignment_3_Group_153
 
         private static void RemoveDVD(MovieCollection movieList, MemberCollection members)
         {
+            Console.WriteLine("======================Remove DVD=======================");
             Console.WriteLine("What movie would you like to remove:");
             string remove = Console.ReadLine();
-            if (movieList.Delete(movieList.Search(remove)))
+            //if (movieList.Delete(movieList.Search(remove)))
+            Movie toBeRmoved = (Movie)movieList.Search(remove);
+            if (toBeRmoved != null)
             {
-                Console.WriteLine($"Movie: {remove} has been removed successfully");
+                Console.WriteLine($"How many copies of {remove} Would you like to remove");
+                string copies = Console.ReadLine();
+                int i = 0;
+                if (int.TryParse(copies, out i) && i >= toBeRmoved.TotalCopies)
+                {
+                    movieList.Delete(toBeRmoved);
+                    Console.WriteLine($"{remove} has been removed from the collection");
+                }
+                else if (i < toBeRmoved.TotalCopies)
+                {
+                    movieList.Search(remove).TotalCopies = i;
+                    Console.WriteLine($"{toBeRmoved.Title} now has {toBeRmoved.TotalCopies} copies");
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Error");
+                    Console.WriteLine();
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
+                }
                 StaffMenu(movieList, members);
             }
             else
@@ -308,6 +351,7 @@ namespace CAB301_Assignment_3_Group_153
 
         private static void RegisterMember(MovieCollection movieList, MemberCollection members)
         {
+            Console.WriteLine("======================Register Member=======================");
             Console.Write("First name:");
             string Firstname = Console.ReadLine();
             Console.Write("Last name:");
@@ -347,7 +391,7 @@ namespace CAB301_Assignment_3_Group_153
 
         private static void RemoveMember(MovieCollection movieList, MemberCollection members)
         {
-            Console.WriteLine("Enter a User to Remove:");
+            Console.WriteLine("======================Remove Member=======================");
 
             Console.Write("First name: ");
             string FirstName = Console.ReadLine();
@@ -382,6 +426,9 @@ namespace CAB301_Assignment_3_Group_153
             else
             {
                 Console.WriteLine("User Does Not Exist");
+                Console.WriteLine();
+                Console.WriteLine("Press enter to continue");
+                Console.ReadLine();
             }
             
 
@@ -390,6 +437,7 @@ namespace CAB301_Assignment_3_Group_153
 
         private static void DisplayInformation(MovieCollection movielist, MemberCollection members)
         {
+            Console.WriteLine("======================Member Information=======================");
             Console.Write("First name: ");
             string FirstName = Console.ReadLine();
             Console.Write("Last name: ");
@@ -406,6 +454,7 @@ namespace CAB301_Assignment_3_Group_153
 
         private static void CurrentBorrowers(MovieCollection movielist, MemberCollection members)
         {
+            Console.WriteLine("=====================Current Borrowers======================");
             Console.Write("Movie: ");
             string movieTitle = Console.ReadLine();
             Movie result = (Movie)movielist.Search(movieTitle);
@@ -428,6 +477,7 @@ namespace CAB301_Assignment_3_Group_153
         //Methods for Member menu
         private static void ListAllMovies(MovieCollection movieList, MemberCollection members, Member currentMember)
         {
+            Console.WriteLine("======================All Movies=======================");
             Movie[] array = (Movie[])movieList.ToArray();
             int i = 0;
             foreach (var item in array)
@@ -441,11 +491,15 @@ namespace CAB301_Assignment_3_Group_153
                     Console.WriteLine("No Available Movies");
                 }
             }
+            Console.WriteLine();
+            Console.WriteLine("Press enter to continue");
+            Console.ReadLine();
             MemberMenu(movieList, members, currentMember);
         }
 
         private static void MovieInformation(MovieCollection movieList, MemberCollection members, Member currentMember)
         {
+            Console.WriteLine("=====================Movie Information======================");
             Console.Write("Movie: ");
             string search = Console.ReadLine();
             Movie temp = (Movie)movieList.Search(search);
@@ -520,7 +574,14 @@ namespace CAB301_Assignment_3_Group_153
             Console.WriteLine("======================Current Borrowing=======================");
             Console.Write("You are currently borrowing: ");
             Console.WriteLine();
-
+            if((Movie)movieList.ToArray()[0] == null)
+            {
+                Console.WriteLine("No Available Movies");
+                Console.WriteLine();
+                Console.WriteLine("Press enter to continue");
+                Console.ReadLine();
+                MemberMenu(movieList, members, currentMember);
+            }
             Movie[] array = (Movie[])movieList.ToArray();
             int foundCount = 0;
 
