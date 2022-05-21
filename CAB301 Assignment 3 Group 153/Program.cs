@@ -328,7 +328,8 @@ namespace CAB301_Assignment_3_Group_153
                 }
                 else if (i < toBeRmoved.TotalCopies)
                 {
-                    movieList.Search(remove).TotalCopies = i;
+                    toBeRmoved.TotalCopies -= i;
+                    toBeRmoved.AvailableCopies -= i;
                     Console.WriteLine($"{toBeRmoved.Title} now has {toBeRmoved.TotalCopies} copies");
                     
                 }
