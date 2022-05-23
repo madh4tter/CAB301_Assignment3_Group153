@@ -115,7 +115,7 @@ namespace CAB301_Assignment_3_Group_153
             else
             {
                 Console.WriteLine("First name, Last name, or Pin incorrect");
-                MemberLogin(movieList, members);
+                MainMenu(movieList, members);
             }
         }
 
@@ -445,9 +445,10 @@ namespace CAB301_Assignment_3_Group_153
             string LastName = Console.ReadLine();
 
             Member search = new Member(FirstName, LastName);
+            IMember foundMember = members.Find(search);
             if (members.Search(search))
             {
-                Console.WriteLine($"{search.LastName} and {search.FirstName} (Last, First): {search.ContactNumber}");
+                Console.WriteLine($"{search.LastName} and {search.FirstName} (Last, First): {foundMember.ContactNumber}");
             }
             StaffMenu(movielist, members);
             
@@ -462,14 +463,14 @@ namespace CAB301_Assignment_3_Group_153
             Console.WriteLine($"Users currently borrowing {movieTitle}:");
             if(result != null)
             {
-                for (int i = 0; i < result.Borrowers.ToString().Length; i++)
+                for (int i = 0; i < result.Borrowers.Number; i++)
                 {
                     Console.WriteLine($"{i + 1}. {result.Borrowers.ToString()}");
                 }
             }
             else
             {
-                Console.WriteLine($"No One is Renting That Movie");
+                Console.WriteLine("No One is Renting That Movie");
             }
             
             StaffMenu(movielist, members);
