@@ -232,9 +232,25 @@ namespace CAB301_Assignment_3_Group_153
                 MovieGenre genre = Genre();
                 MovieClassification classification = Classification();
                 Console.Write("Duration: ");
-                int duration = Convert.ToInt32(Console.ReadLine());
+
+                int duration;
+                string temp = Console.ReadLine();
+                bool parseTest = int.TryParse(temp, out duration);
+                if (parseTest == false)
+                {
+                    StaffMenu(movieList, members);
+                }
+
+                int availableCopies;
                 Console.Write("Available Copies: ");
-                int availableCopies = Convert.ToInt32(Console.ReadLine());
+                temp = Console.ReadLine();
+                parseTest = int.TryParse(temp, out availableCopies);
+                if (parseTest == false)
+                {
+                    StaffMenu(movieList, members);
+                }
+                //int availableCopies = Convert.ToInt32(Console.ReadLine());
+
                 Movie add = new Movie(title, genre, classification, duration, availableCopies);
                 if (movieList.Insert(add))
                 {
