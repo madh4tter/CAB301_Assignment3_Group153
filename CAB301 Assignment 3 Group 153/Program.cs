@@ -8,6 +8,7 @@ namespace CAB301_Assignment_3_Group_153
         {
             MovieCollection aCollection = new MovieCollection();
             MemberCollection members = new MemberCollection(10);
+            /*
             Member test = new Member("test", "temp", "0333333333", "1234");
             Member temp = new Member("temp", "test", "0333333333", "1234");
             Member wert = new Member("wert", "fee", "0333333333", "1234");
@@ -15,14 +16,15 @@ namespace CAB301_Assignment_3_Group_153
             members.Add(temp);
             members.Add(wert);
 
-            Movie Titanic = new Movie("Titanic", MovieGenre.Drama, MovieClassification.M, 120, 10);
-            Movie wer = new Movie("wer", MovieGenre.Drama, MovieClassification.M, 120, 10);
-            Movie dessa = new Movie("dessa", MovieGenre.Drama, MovieClassification.M, 120, 10);
-            Movie dgfh = new Movie("dgfh", MovieGenre.Drama, MovieClassification.M, 120, 10);
+            Movie Titanic = new Movie("Titanic", MovieGenre.Drama, MovieClassification.M, 194, 10);
+            Movie StarWars = new Movie("Star Wars", MovieGenre.Action, MovieClassification.M, 142, 5);
+            Movie IndianaJones = new Movie("Indiana Jones", MovieGenre.Action, MovieClassification.M, 115, 3);
+            Movie TheAvengers = new Movie("The Avengers", MovieGenre.Action, MovieClassification.M, 143, 2);
             aCollection.Insert(Titanic);
-            aCollection.Insert(wer);
-            aCollection.Insert(dessa);
-            aCollection.Insert(dgfh);
+            aCollection.Insert(StarWars);
+            aCollection.Insert(IndianaJones);
+            aCollection.Insert(TheAvengers);
+            */
 
             //Main Menu
             MainMenu(aCollection, members);
@@ -466,6 +468,10 @@ namespace CAB301_Assignment_3_Group_153
             {
                 Console.WriteLine($"{search.LastName} and {search.FirstName} (Last, First): {foundMember.ContactNumber}");
             }
+            else
+            {
+                Console.WriteLine($"Member {FirstName} {LastName} Not Found");
+            }
             StaffMenu(movielist, members);
             
         }
@@ -476,17 +482,22 @@ namespace CAB301_Assignment_3_Group_153
             Console.Write("Movie: ");
             string movieTitle = Console.ReadLine();
             Movie result = (Movie)movielist.Search(movieTitle);
-            Console.WriteLine($"Users currently borrowing {movieTitle}:");
+            
             if(result != null)
             {
+                Console.WriteLine($"Users currently borrowing {movieTitle}:");
                 for (int i = 0; i < result.Borrowers.Number; i++)
                 {
                     Console.WriteLine($"{i + 1}. {result.Borrowers.ToString()}");
                 }
+                if(result.Borrowers.Number == 0)
+                {
+                    Console.WriteLine("No One is Renting That Movie");
+                }
             }
             else
             {
-                Console.WriteLine("No One is Renting That Movie");
+                Console.WriteLine("Movie Does not Exist");
             }
             
             StaffMenu(movielist, members);
