@@ -107,7 +107,7 @@ namespace CAB301_Assignment_3_Group_153
 
             if (members.IsEmpty())
             {
-                Console.WriteLine("No members");
+                Console.WriteLine("First name, Last name, or Pin incorrect");
                 MainMenu(movieList, members);
             }
             else if (members.Search(temp) && members.Find(temp).Pin == Pin)
@@ -509,17 +509,22 @@ namespace CAB301_Assignment_3_Group_153
             Console.WriteLine("======================All Movies=======================");
             Movie[] array = (Movie[])movieList.ToArray();
             int i = 0;
-            foreach (var item in array)
+            if(movieList.IsEmpty() == false)
             {
-                if (item != null)
+                foreach (var item in array)
                 {
-                    Console.WriteLine($"{i++ + 1}. {item.ToString()}");
-                }
-                else
-                {
-                    Console.WriteLine("No Available Movies");
+                    if (item != null)
+                    {
+                        Console.WriteLine($"{i++ + 1}. {item.ToString()}");
+                    }
                 }
             }
+            else
+
+            {
+                Console.WriteLine("No Available Movies");
+            }
+            
             Console.WriteLine();
             Console.WriteLine("Press enter to continue");
             Console.ReadLine();
@@ -603,7 +608,8 @@ namespace CAB301_Assignment_3_Group_153
             Console.WriteLine("======================Current Borrowing=======================");
             Console.Write("You are currently borrowing: ");
             Console.WriteLine();
-            if((Movie)movieList.ToArray()[0] == null)
+
+            if(movieList.IsEmpty())
             {
                 Console.WriteLine("No Available Movies");
                 Console.WriteLine();
@@ -611,25 +617,28 @@ namespace CAB301_Assignment_3_Group_153
                 Console.ReadLine();
                 MemberMenu(movieList, members, currentMember);
             }
-            Movie[] array = (Movie[])movieList.ToArray();
-            int foundCount = 0;
-
-            for (int i = 0; i < array.Length; i++)
+            else
             {
-                if (array[i] != null && array[i].TotalCopies > array[i].AvailableCopies)
+                Movie[] array = (Movie[])movieList.ToArray();
+                int foundCount = 0;
+
+                for (int i = 0; i < array.Length; i++)
                 {
-                    if (array[i].Borrowers.Search(currentMember))
+                    if (array[i] != null && array[i].TotalCopies > array[i].AvailableCopies)
                     {
-                        Console.WriteLine($"{foundCount++ + 1}. {array[i].ToString()}");
+                        if (array[i].Borrowers.Search(currentMember))
+                        {
+                            Console.WriteLine($"{foundCount++ + 1}. {array[i].ToString()}");
+                        }
                     }
                 }
+                if (foundCount == 0)
+                {
+                    Console.WriteLine("No Available Movies");
+                }
+                Console.WriteLine();
+                MemberMenu(movieList, members, currentMember);
             }
-            if (foundCount == 0)
-            {
-                Console.WriteLine("No Available Movies");
-            }
-            Console.WriteLine();
-            MemberMenu(movieList, members, currentMember);
         }
 
         private static void TopThree(MovieCollection movieList, MemberCollection members, Member currentMember)
@@ -640,29 +649,35 @@ namespace CAB301_Assignment_3_Group_153
 
             Movie[] array = (Movie[])movieList.ToArray();
 
-            // Sort Array
-            int max;
-            Movie temp;
-            for (int i = 0; i <= (array.Length - 2); i++)
+            if(movieList.IsEmpty())
             {
-                max = i;
-                for (int j = (i + 1); j <= (array.Length - 1); j++)
+                Console.WriteLine("No DVDs Available");
+            }
+            else
+            {
+                // Sort Array
+                int max;
+                Movie temp;
+                for (int i = 0; i <= (array.Length - 2); i++)
                 {
-                    if (array[j].NoBorrowings.CompareTo(array[max].NoBorrowings) == 1)
+                    max = i;
+                    for (int j = (i + 1); j <= (array.Length - 1); j++)
                     {
-                        max = j;
+                        if (array[j].NoBorrowings.CompareTo(array[max].NoBorrowings) == 1)
+                        {
+                            max = j;
+                        }
                     }
+                    temp = array[i];
+                    array[i] = array[max];
+                    array[max] = temp;
                 }
-                temp = array[i];
-                array[i] = array[max];
-                array[max] = temp;
-            }
 
-            for (int i = 0; i < 3; i++)
-            {
-                Console.WriteLine($"{i+1}: {array[i].Title}");
+                for (int i = 0; i < 3; i++)
+                {
+                    Console.WriteLine($"{i + 1}: {array[i].Title}");
+                }
             }
-
             Console.WriteLine();
             MemberMenu(movieList, members, currentMember);
         }
