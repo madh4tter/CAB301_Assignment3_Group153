@@ -339,12 +339,12 @@ namespace CAB301_Assignment_3_Group_153
                 Console.WriteLine($"How many copies of {remove} Would you like to remove");
                 string copies = Console.ReadLine();
                 int i = 0;
-                if (int.TryParse(copies, out i) && i >= toBeRmoved.TotalCopies)
+                if (int.TryParse(copies, out i) && i >= toBeRmoved.TotalCopies && toBeRmoved.NoBorrowings <= 0)
                 {
                     movieList.Delete(toBeRmoved);
                     Console.WriteLine($"{remove} has been removed from the collection");
                 }
-                else if (i < toBeRmoved.TotalCopies)
+                else if (i < toBeRmoved.TotalCopies && toBeRmoved.NoBorrowings <= 0)
                 {
                     toBeRmoved.TotalCopies -= i;
                     toBeRmoved.AvailableCopies -= i;
