@@ -8,7 +8,7 @@ namespace CAB301_Assignment_3_Group_153
         {
             MovieCollection aCollection = new MovieCollection();
             MemberCollection members = new MemberCollection(10);
-            /*
+            
             Member test = new Member("test", "temp", "0333333333", "1234");
             Member temp = new Member("temp", "test", "0333333333", "1234");
             Member wert = new Member("wert", "fee", "0333333333", "1234");
@@ -24,7 +24,7 @@ namespace CAB301_Assignment_3_Group_153
             aCollection.Insert(StarWars);
             aCollection.Insert(IndianaJones);
             aCollection.Insert(TheAvengers);
-            */
+            
 
             //Main Menu
             MainMenu(aCollection, members);
@@ -515,7 +515,7 @@ namespace CAB301_Assignment_3_Group_153
                 {
                     if (item != null)
                     {
-                        Console.WriteLine($"{i++ + 1}. {item.ToString()}");
+                        Console.WriteLine($"{i++ + 1}. \tCopies: {item.Title} \tAvailable Copies: {item.AvailableCopies}");
                     }
                 }
             }
@@ -561,9 +561,17 @@ namespace CAB301_Assignment_3_Group_153
             Console.Write("Search: ");
             string search = Console.ReadLine();
             Movie temp = (Movie)movieList.Search(search);
-            if (temp != null && temp.AddBorrower(currentMember))
+            bool test = temp.AddBorrower(currentMember);
+            if (temp != null && test)
             {
                 Console.WriteLine("Movie Successfully borrowed");
+                Console.WriteLine();
+                Console.WriteLine("Press enter to continue");
+                Console.ReadLine();
+                MemberMenu(movieList, members, currentMember);
+            }
+            else if (temp != null && !test)
+            {
                 Console.WriteLine();
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
