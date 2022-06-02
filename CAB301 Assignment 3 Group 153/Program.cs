@@ -561,7 +561,8 @@ namespace CAB301_Assignment_3_Group_153
             Console.Write("Search: ");
             string search = Console.ReadLine();
             Movie temp = (Movie)movieList.Search(search);
-            bool test = temp.AddBorrower(currentMember);
+            bool test = false;
+            if (temp != null) { test = temp.AddBorrower(currentMember); }
             if (temp != null && test)
             {
                 Console.WriteLine("Movie Successfully borrowed");
