@@ -657,34 +657,48 @@ namespace CAB301_Assignment_3_Group_153
             Console.WriteLine();
 
             Movie[] array = (Movie[])movieList.ToArray();
+            // Create a temp movie to assign to the three values before they're assigned by the algorithm itself
+            Movie TempMovie = new Movie("temp", MovieGenre.Action, MovieClassification.G, 0, 0);
+            // Give the temp movie a minvalue, so that any value of NoBorrowings in the real movielist will overwrite the temp movie
+            TempMovie.NoBorrowings = int.MinValue;
 
-            if(movieList.IsEmpty())
+            if (movieList.IsEmpty())
             {
                 Console.WriteLine("No DVDs Available");
             }
             else
             {
-                // Sort Array
-                int max;
-                Movie temp;
-                for (int i = 0; i <= (array.Length - 2); i++)
+
+                Movie first = TempMovie;
+                Movie second = TempMovie;
+                Movie third = TempMovie;
+                for (int i = 0; i <= (array.Length - 1); i++)
                 {
-                    max = i;
-                    for (int j = (i + 1); j <= (array.Length - 1); j++)
+                    if (array[i].NoBorrowings < first.NoBorrowings)
                     {
-                        if (array[j].NoBorrowings.CompareTo(array[max].NoBorrowings) == 1)
-                        {
-                            max = j;
-                        }
+                        first = array[i];
                     }
-                    temp = array[i];
-                    array[i] = array[max];
-                    array[max] = temp;
+                    else if (array[i].NoBorrowings < second.NoBorrowings)
+                    {
+                        second = array[i];
+                    }
+                    else if (array[i].NoBorrowings < third.NoBorrowings)
+                    {
+                        third = array[i];
+                    }
                 }
 
-                for (int i = 0; i < 3; i++)
+
+                // Display of the top movies
+                Console.WriteLine("1: " + first.Title + ", Borrowings: " + first.NoBorrowings);
+                // Handling if movielist only has 1 or 2 movies in it.
+                if (array.Length > 1)
                 {
-                    Console.WriteLine($"{i + 1}: {array[i].Title}");
+                    Console.WriteLine("2: " + second.Title + ", Borrowings: " + second.NoBorrowings);
+                }
+                if (array.Length > 2)
+                {
+                    Console.WriteLine("3: " + third.Title + ", Borrowings: " + third.NoBorrowings);
                 }
             }
             Console.WriteLine();
