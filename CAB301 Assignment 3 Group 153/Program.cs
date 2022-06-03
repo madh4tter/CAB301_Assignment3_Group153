@@ -690,15 +690,15 @@ namespace CAB301_Assignment_3_Group_153
 
 
                 // Display of the top movies
-                Console.WriteLine("1: " + first.Title + ", Borrowings: " + first.NoBorrowings);
+                Console.WriteLine("1: " + first.Title + ", Borrowings: " + first.NoBorrowings.ToString());
                 // Handling if movielist only has 1 or 2 movies in it.
                 if (array.Length > 1)
                 {
-                    Console.WriteLine("2: " + second.Title + ", Borrowings: " + second.NoBorrowings);
+                    Console.WriteLine("2: " + second.Title + ", Borrowings: " + second.NoBorrowings.ToString());
                 }
                 if (array.Length > 2)
                 {
-                    Console.WriteLine("3: " + third.Title + ", Borrowings: " + third.NoBorrowings);
+                    Console.WriteLine("3: " + third.Title + ", Borrowings: " + third.NoBorrowings.ToString());
                 }
             }
             Console.WriteLine();
