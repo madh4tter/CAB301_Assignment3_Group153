@@ -146,7 +146,7 @@ class MemberCollection : IMemberCollection
     public bool Search(IMember member)
     {
         // To be implemented by students in Phase 1
-        if (count == 0)
+        if (count == 1)
         {
             if (member.CompareTo(members[0]) == 0)
             {
