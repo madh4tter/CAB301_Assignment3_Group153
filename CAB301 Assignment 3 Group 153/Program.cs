@@ -653,12 +653,12 @@ namespace CAB301_Assignment_3_Group_153
         private static void TopThree(MovieCollection movieList, MemberCollection members, Member currentMember)
         {
             Console.WriteLine("======================Top Three DVDS=======================");
-            Console.Write("The Current Top Three DVDS are: ");
-            Console.WriteLine();
 
             Movie[] array = (Movie[])movieList.ToArray();
-            // Create a temp movie to assign to the three values before they're assigned by the algorithm itself
-            Movie TempMovie = new Movie("temp", MovieGenre.Action, MovieClassification.G, 0, 0);
+            int i, first, second, third;
+            string first_title = "";
+            string second_title = "";
+            string third_title = "";
 
             if (movieList.IsEmpty())
             {
@@ -667,28 +667,44 @@ namespace CAB301_Assignment_3_Group_153
             else
             {
 
-                Movie first = TempMovie;
-                Movie second = TempMovie;
-                Movie third = TempMovie;
-                for (int i = 0; i <= (array.Length - 1); i++)
+                // There should be atleast three elements
+                third = first = second = 000;
+                third_title = first_title = second_title = "";
+                for (i = 0; i < array.Length; i++)
                 {
-                    if (array[i].NoBorrowings > first.NoBorrowings)
+                    // If current element is
+                    // greater than first
+                    if (array[i].NoBorrowings > first)
                     {
-                        first = array[i];
-                    }
-                    else if (array[i].NoBorrowings > second.NoBorrowings)
-                    {
-                        second = array[i];
-                    }
-                    else if (array[i].NoBorrowings > third.NoBorrowings)
-                    {
-                        third = array[i];
-                    }
-                }
+                        third = second;
+                        second = first;
+                        first = array[i].NoBorrowings;
 
-                if (first.NoBorrowings <= 0)
+                        third_title = second_title;
+                        second_title = first_title;
+                        first_title = array[i].Title;
+                    }
+
+                    // If arr[i] is in between first
+                    // and second then update second
+                    else if (array[i].NoBorrowings > second)
+                    {
+                        third = second;
+                        second = array[i].NoBorrowings;
+
+                        third_title = second_title;
+                        second_title = array[i].Title;
+                    }
+
+                    else if (array[i].NoBorrowings > third)
+                    {
+                        third = array[i].NoBorrowings;
+                        third_title = array[i].Title;
+                    }                       
+                }
+                if (first == 0)
                 {
-                    Console.WriteLine("No Available Movies");
+                    Console.WriteLine("No movies borrowed");
                     Console.WriteLine();
                     Console.WriteLine("Press enter to continue");
                     Console.ReadLine();
@@ -696,20 +712,22 @@ namespace CAB301_Assignment_3_Group_153
                 }
                 else
                 {
-                    // Display of the top movies
-                    Console.WriteLine("1: " + first.Title + ", Borrowings: " + first.NoBorrowings.ToString());
-                    // Handling if movielist only has 1 or 2 movies in it.
-                    if (second.NoBorrowings > 0)
-                    {
-                        Console.WriteLine("2: " + second.Title + ", Borrowings: " + second.NoBorrowings.ToString());
-                    }
-                    if (third.NoBorrowings > 0)
-                    {
-                        Console.WriteLine("3: " + third.Title + ", Borrowings: " + third.NoBorrowings.ToString());
-                    }
+                    Console.Write("The Current Top Three DVDS are: ");
+                    Console.WriteLine();
+                    Console.WriteLine($"1. Title: {first_title} \tBorrows: {first}");
+                }
+                if (second > 0)
+                {
+                    Console.WriteLine($"2. Title: {second_title} \tBorrows: {second}");
+                }
+                if (third > 0)
+                {
+                    Console.WriteLine($"3. Title: {third_title} \tBorrows: {third}");
                 }
             }
             Console.WriteLine();
+            Console.WriteLine("Press enter to continue");
+            Console.ReadLine();
             MemberMenu(movieList, members, currentMember);
         }
     }
