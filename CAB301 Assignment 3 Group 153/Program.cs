@@ -674,15 +674,15 @@ namespace CAB301_Assignment_3_Group_153
                 Movie third = TempMovie;
                 for (int i = 0; i <= (array.Length - 1); i++)
                 {
-                    if (array[i].NoBorrowings < first.NoBorrowings)
+                    if (array[i].NoBorrowings > first.NoBorrowings)
                     {
                         first = array[i];
                     }
-                    else if (array[i].NoBorrowings < second.NoBorrowings)
+                    else if (array[i].NoBorrowings > second.NoBorrowings)
                     {
                         second = array[i];
                     }
-                    else if (array[i].NoBorrowings < third.NoBorrowings)
+                    else if (array[i].NoBorrowings > third.NoBorrowings)
                     {
                         third = array[i];
                     }
@@ -692,11 +692,11 @@ namespace CAB301_Assignment_3_Group_153
                 // Display of the top movies
                 Console.WriteLine("1: " + first.Title + ", Borrowings: " + first.NoBorrowings.ToString());
                 // Handling if movielist only has 1 or 2 movies in it.
-                if (array.Length > 1)
+                if (second.NoBorrowings != 0)
                 {
                     Console.WriteLine("2: " + second.Title + ", Borrowings: " + second.NoBorrowings.ToString());
                 }
-                if (array.Length > 2)
+                if (third.NoBorrowings != 0)
                 {
                     Console.WriteLine("3: " + third.Title + ", Borrowings: " + third.NoBorrowings.ToString());
                 }
