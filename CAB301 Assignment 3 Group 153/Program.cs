@@ -659,8 +659,6 @@ namespace CAB301_Assignment_3_Group_153
             Movie[] array = (Movie[])movieList.ToArray();
             // Create a temp movie to assign to the three values before they're assigned by the algorithm itself
             Movie TempMovie = new Movie("temp", MovieGenre.Action, MovieClassification.G, 0, 0);
-            // Give the temp movie a minvalue, so that any value of NoBorrowings in the real movielist will overwrite the temp movie
-            TempMovie.NoBorrowings = int.MinValue;
 
             if (movieList.IsEmpty())
             {
@@ -688,17 +686,27 @@ namespace CAB301_Assignment_3_Group_153
                     }
                 }
 
-
-                // Display of the top movies
-                Console.WriteLine("1: " + first.Title + ", Borrowings: " + first.NoBorrowings.ToString());
-                // Handling if movielist only has 1 or 2 movies in it.
-                if (second.NoBorrowings != 0)
+                if (first.NoBorrowings <= 0)
                 {
-                    Console.WriteLine("2: " + second.Title + ", Borrowings: " + second.NoBorrowings.ToString());
+                    Console.WriteLine("No Available Movies");
+                    Console.WriteLine();
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
+                    MemberMenu(movieList, members, currentMember);
                 }
-                if (third.NoBorrowings != 0)
+                else
                 {
-                    Console.WriteLine("3: " + third.Title + ", Borrowings: " + third.NoBorrowings.ToString());
+                    // Display of the top movies
+                    Console.WriteLine("1: " + first.Title + ", Borrowings: " + first.NoBorrowings.ToString());
+                    // Handling if movielist only has 1 or 2 movies in it.
+                    if (second.NoBorrowings > 0)
+                    {
+                        Console.WriteLine("2: " + second.Title + ", Borrowings: " + second.NoBorrowings.ToString());
+                    }
+                    if (third.NoBorrowings > 0)
+                    {
+                        Console.WriteLine("3: " + third.Title + ", Borrowings: " + third.NoBorrowings.ToString());
+                    }
                 }
             }
             Console.WriteLine();
