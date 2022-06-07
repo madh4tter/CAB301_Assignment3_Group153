@@ -339,26 +339,50 @@ namespace CAB301_Assignment_3_Group_153
                 Console.WriteLine($"How many copies of {remove} Would you like to remove");
                 string copies = Console.ReadLine();
                 int i = 0;
-                if (int.TryParse(copies, out i) && i >= toBeRmoved.TotalCopies && toBeRmoved.NoBorrowings <= 0)
+                bool test = int.TryParse(copies, out i);
+                if (toBeRmoved.Borrowers.Number > 0)
                 {
-                    movieList.Delete(toBeRmoved);
-                    Console.WriteLine($"{remove} has been removed from the collection");
-                }
-                else if (i < toBeRmoved.TotalCopies && toBeRmoved.NoBorrowings <= 0)
-                {
-                    toBeRmoved.TotalCopies -= i;
-                    toBeRmoved.AvailableCopies -= i;
-                    Console.WriteLine($"{toBeRmoved.Title} now has {toBeRmoved.TotalCopies} copies");
-                    
-                }
-                else
-                {
-                    Console.WriteLine("Error");
+                    if ((toBeRmoved.TotalCopies - toBeRmoved.Borrowers.Number) < i && test)
+                    {
+                        toBeRmoved.AvailableCopies = toBeRmoved.Borrowers.Number;
+                        toBeRmoved.TotalCopies = toBeRmoved.Borrowers.Number;
+                        Console.WriteLine($"{toBeRmoved.Title} is currently being borrowed by {toBeRmoved.Borrowers.Number}");
+                        Console.WriteLine($"Total copies has been reduced to {toBeRmoved.TotalCopies}");
+                    }
+                    else
+                    {
+                        toBeRmoved.TotalCopies -= i;
+                        toBeRmoved.AvailableCopies -= i;
+                        Console.WriteLine($"{toBeRmoved.Title} now has {toBeRmoved.TotalCopies} copies");
+                    }
                     Console.WriteLine();
                     Console.WriteLine("Press enter to continue");
                     Console.ReadLine();
+                    StaffMenu(movieList, members);
                 }
-                StaffMenu(movieList, members);
+                else
+                {
+                    if (test && i >= toBeRmoved.TotalCopies && toBeRmoved.NoBorrowings <= 0)
+                    {
+                        movieList.Delete(toBeRmoved);
+                        Console.WriteLine($"{remove} has been removed from the collection");
+                    }
+                    else if (i < toBeRmoved.TotalCopies && toBeRmoved.NoBorrowings <= 0)
+                    {
+                        toBeRmoved.TotalCopies -= i;
+                        toBeRmoved.AvailableCopies -= i;
+                        Console.WriteLine($"{toBeRmoved.Title} now has {toBeRmoved.TotalCopies} copies");
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error");
+                        Console.WriteLine();
+                        Console.WriteLine("Press enter to continue");
+                        Console.ReadLine();
+                    }
+                    StaffMenu(movieList, members);
+                }
             }
             else
             {
