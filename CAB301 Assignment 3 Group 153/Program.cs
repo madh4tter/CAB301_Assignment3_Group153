@@ -9,6 +9,7 @@ namespace CAB301_Assignment_3_Group_153
             MovieCollection aCollection = new MovieCollection();
             MemberCollection members = new MemberCollection(10);
             
+            
             Member test = new Member("test", "temp", "0333333333", "1234");
             Member temp = new Member("temp", "test", "0333333333", "1234");
             Member wert = new Member("wert", "fee", "0333333333", "1234");
@@ -24,6 +25,7 @@ namespace CAB301_Assignment_3_Group_153
             aCollection.Insert(StarWars);
             aCollection.Insert(IndianaJones);
             aCollection.Insert(TheAvengers);
+            
             
 
             //Main Menu
@@ -330,26 +332,27 @@ namespace CAB301_Assignment_3_Group_153
         private static void RemoveDVD(MovieCollection movieList, MemberCollection members)
         {
             Console.WriteLine("======================Remove DVD=======================");
-            Console.WriteLine("What movie would you like to remove:");
+            Console.WriteLine("What movie would you like to remove?:");
             string remove = Console.ReadLine();
-            //if (movieList.Delete(movieList.Search(remove)))
             Movie toBeRmoved = (Movie)movieList.Search(remove);
+
             if (toBeRmoved != null)
             {
-                Console.WriteLine($"How many copies of {remove} Would you like to remove");
+                Console.WriteLine($"How many copies of {toBeRmoved.Title} would you like to remove?");
                 string copies = Console.ReadLine();
                 int i = 0;
                 bool test = int.TryParse(copies, out i);
-                if (toBeRmoved.Borrowers.Number > 0)
+
+                if (toBeRmoved.Borrowers.Number > 0 && test) //If Someone is borrowing
                 {
-                    if ((toBeRmoved.TotalCopies - toBeRmoved.Borrowers.Number) < i && test)
+                    if ((toBeRmoved.TotalCopies - toBeRmoved.Borrowers.Number) < i) //Try Removing Too Many DVDs
                     {
-                        toBeRmoved.AvailableCopies = toBeRmoved.Borrowers.Number;
+                        toBeRmoved.AvailableCopies = 0;
                         toBeRmoved.TotalCopies = toBeRmoved.Borrowers.Number;
-                        Console.WriteLine($"{toBeRmoved.Title} is currently being borrowed by {toBeRmoved.Borrowers.Number}");
+                        Console.WriteLine($"{toBeRmoved.Title} is currently being borrowed by {toBeRmoved.Borrowers.Number} people");
                         Console.WriteLine($"Total copies has been reduced to {toBeRmoved.TotalCopies}");
                     }
-                    else
+                    else //Enough DVDs to Remove
                     {
                         toBeRmoved.TotalCopies -= i;
                         toBeRmoved.AvailableCopies -= i;
@@ -358,37 +361,37 @@ namespace CAB301_Assignment_3_Group_153
                     Console.WriteLine();
                     Console.WriteLine("Press enter to continue");
                     Console.ReadLine();
-                    StaffMenu(movieList, members);
                 }
-                else
+                else if (test) //If no one is borrowing
                 {
-                    if (test && i >= toBeRmoved.TotalCopies && toBeRmoved.NoBorrowings <= 0)
+                    if (i >= toBeRmoved.TotalCopies) //Trying to remove more or equal to total amount = completely remove.
                     {
-                        movieList.Delete(toBeRmoved);
-                        Console.WriteLine($"{remove} has been removed from the collection");
+                         movieList.Delete(toBeRmoved);
+                        Console.WriteLine($"{toBeRmoved.Title} has been removed from the collection");
                     }
-                    else if (i < toBeRmoved.TotalCopies && toBeRmoved.NoBorrowings <= 0)
+                    else if (i < toBeRmoved.TotalCopies) //Trying to remove less than total amount = remove the amount.
                     {
                         toBeRmoved.TotalCopies -= i;
                         toBeRmoved.AvailableCopies -= i;
                         Console.WriteLine($"{toBeRmoved.Title} now has {toBeRmoved.TotalCopies} copies");
 
                     }
-                    else
-                    {
-                        Console.WriteLine("Error");
-                        Console.WriteLine();
-                        Console.WriteLine("Press enter to continue");
-                        Console.ReadLine();
-                    }
-                    StaffMenu(movieList, members);
+                }
+                else //If Invalid Search, Error
+                {
+                    Console.WriteLine("Error");
+                    Console.WriteLine();
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
                 }
             }
-            else
+            else //Movie not found
             {
                 Console.WriteLine($"Movie: {remove} not found");
-                StaffMenu(movieList, members);
+                
             }
+
+            StaffMenu(movieList, members);
         }
 
 

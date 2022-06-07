@@ -133,7 +133,11 @@ public class MovieCollection : IMovieCollection
 			count--;
 			return true;
 		}
-		else return false;
+		else
+		{
+			count--;
+			return false;
+		}
 	}
 
 	public bool Delete(Movie movie, BTreeNode ptr)
@@ -155,6 +159,7 @@ public class MovieCollection : IMovieCollection
 				{
 					ptr.Movie = ptr.LChild.Movie;
 					ptr.LChild = ptr.LChild.LChild;
+					return true;
 				}
 				else
 				{
@@ -167,6 +172,7 @@ public class MovieCollection : IMovieCollection
 					}
 					ptr.Movie = p.Movie;
 					pp.RChild = p.LChild;
+
 				}
 			}
 			else
