@@ -160,7 +160,7 @@ class MemberCollection : IMemberCollection
         else if (count > 0)
         {
             int low = 0;
-            int high = count;
+            int high = count - 1;
             int mid = (low + high) / 2;
 
             while (low < high)
